@@ -1109,8 +1109,8 @@ impl SpircTask {
 
         // Synchronize the volume from the mixer. This is useful on
         // systems that can switch sources from and back to librespot.
-        let current_volume = self.mixer.volume();
-        self.set_volume(current_volume);
+        //let current_volume = self.mixer.volume();
+        //self.set_volume(current_volume);
     }
 
     fn handle_play_pause(&mut self) {
