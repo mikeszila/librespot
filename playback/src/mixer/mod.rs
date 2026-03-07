@@ -3,7 +3,9 @@ use librespot_core::Error;
 use std::sync::Arc;
 
 pub mod mappings;
+pub mod observablefixed;
 use self::mappings::MappedCtrl;
+use self::observablefixed::ObservableFixedMixer;
 
 pub struct NoOpVolume;
 
@@ -66,6 +68,7 @@ fn mk_sink<M: Mixer + 'static>(config: MixerConfig) -> Result<Arc<dyn Mixer>, Er
 
 pub const MIXERS: &[(&str, MixerFn)] = &[
     (SoftMixer::NAME, mk_sink::<SoftMixer>), // default goes first
+    (ObservableFixedMixer::NAME, mk_sink::<ObservableFixedMixer>),
     #[cfg(feature = "alsa-backend")]
     (AlsaMixer::NAME, mk_sink::<AlsaMixer>),
 ];
