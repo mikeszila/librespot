@@ -3,6 +3,7 @@ use librespot_core::Error;
 use std::sync::Arc;
 
 pub mod mappings;
+pub mod observablefixed;
 use self::mappings::MappedCtrl;
 
 pub struct NoOpVolume;
@@ -33,6 +34,7 @@ impl VolumeGetter for NoOpVolume {
 
 pub mod softmixer;
 use self::softmixer::SoftMixer;
+use self::observablefixed::ObservableFixedMixer;
 
 #[cfg(feature = "alsa-backend")]
 pub mod alsamixer;
@@ -66,10 +68,10 @@ fn mk_sink<M: Mixer + 'static>(config: MixerConfig) -> Result<Arc<dyn Mixer>, Er
 
 pub const MIXERS: &[(&str, MixerFn)] = &[
     (SoftMixer::NAME, mk_sink::<SoftMixer>), // default goes first
+    (ObservableFixedMixer::NAME, mk_sink::<ObservableFixedMixer>),
     #[cfg(feature = "alsa-backend")]
     (AlsaMixer::NAME, mk_sink::<AlsaMixer>),
 ];
-
 pub fn find(name: Option<&str>) -> Option<MixerFn> {
     if let Some(name) = name {
         MIXERS
